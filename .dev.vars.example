@@ -1,0 +1,14 @@
+# Secrets for the Worker.
+#
+# Cloudflare's "Deploy to Cloudflare" flow reads this file to know which secrets
+# to prompt for, and `wrangler dev` reads `.dev.vars` (copy this file) locally.
+# Never commit `.dev.vars` — it is git-ignored.
+
+# Password for the initial `admin` account. Only used while the `users` table is
+# empty; if unset the bootstrap password is "admin".
+ADMIN_PASSWORD=admin
+
+# PBKDF2-SHA256 iteration count for password hashing.
+# Production default (omit this variable) is 100000. A low value is only useful
+# to keep local dev and the test suite fast.
+# AUTH_ITERATIONS=100000

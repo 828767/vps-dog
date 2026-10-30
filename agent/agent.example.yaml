@@ -1,0 +1,33 @@
+# VPS-DOG agent configuration (example)
+#
+# Copy to /etc/vps-dog/agent.yaml (or point -c at it) and fill in your values.
+# Precedence: CLI flag > environment variable > this file > built-in default.
+#
+# Environment variable equivalents:
+#   server           VPSDOG_SERVER
+#   token            VPSDOG_TOKEN
+#   name             VPSDOG_NAME
+#   region           VPSDOG_REGION
+#   tls_skip_verify  VPSDOG_TLS_SKIP_VERIFY
+#   (-c path)        VPSDOG_CONFIG
+
+# Base URL of your VPS-DOG worker deployment. No trailing slash.
+server: "https://vps-dog.example.workers.dev"
+
+# Agent token issued by the admin API (POST /api/admin/nodes).
+# 64 hex characters. Keep this file mode 0600.
+token: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+
+# Display name for this node. Sent on first contact and ignored afterwards;
+# rename it from the dashboard later if you like.
+name: "hk-01"
+
+# Optional region label, stored with the node and shown in the dashboard.
+# region: "HK"
+
+# Seconds between reports. The server may override this via the report
+# response; the agent clamps whatever it receives to 10..3600.
+interval: 30
+
+# Set to true only for a worker with a self-signed certificate.
+tls_skip_verify: false

@@ -1,0 +1,41 @@
+name = "vps-dog"
+main = "worker/src/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# D1 database.
+#
+# `database_id` is a placeholder on purpose. Every supported deploy path
+# replaces it with the id of a database that really exists in *your* account:
+#
+#   * "Deploy to Cloudflare" button — rewrites this file in the copy it clones.
+#   * `pnpm deploy` / `pnpm db:ensure` — `scripts/ensure-d1.mjs` runs first,
+#     creates the database when it is missing and rewrites this value.
+#   * Workers Builds — the same script runs from the `build` script.
+#
+# Never commit an id copied from someone else's fork: the account that deploys
+# is the one that must own the database, otherwise `wrangler deploy` stops with
+# `[code: 10181]` (database not found) or `[code: 10021]` (invalid id).
+# Keep the key present — it is what the provisioning step binds to.
+[[d1_databases]]
+binding = "DB"
+database_name = "vps-dog"
+database_id = "f984f307-0897-4587-a03d-770cb3570686"
+migrations_dir = "worker/migrations"
+
+[assets]
+directory = "web/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+# `true` so the SPA shell is rendered by the Worker and the `custom_head`
+# setting can be injected. Static assets are still served by the binding.
+run_worker_first = true
+
+[triggers]
+# Every minute: uptime monitors need 1-minute resolution. The retention sweep
+# and node alert scan gate themselves to every fifth tick (see worker/src/index.ts).
+crons = ["* * * * *"]
+
+[vars]
+ENVIRONMENT = "production"

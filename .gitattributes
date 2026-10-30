@@ -1,0 +1,29 @@
+# Normalise line endings so the repo behaves the same on Windows, macOS and Linux.
+#
+# Shell scripts and Go sources are checked out with LF everywhere: a CRLF
+# `install.sh` fails on Linux with `bad interpreter: /bin/bash^M`, and `gofmt`
+# rejects CRLF sources.
+* text=auto eol=lf
+
+*.sh   text eol=lf
+*.go   text eol=lf
+*.sql  text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.css  text eol=lf
+*.html text eol=lf
+
+# Windows-only scripts keep CRLF so they run under the default PowerShell.
+*.ps1  text eol=crlf
+
+# Binary assets must never be line-ending converted.
+*.png  binary
+*.jpg  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary

@@ -1,0 +1,18 @@
+packages:
+  - worker
+  - web
+
+# pnpm >= 10 will not run install scripts for dependencies unless they are
+# explicitly approved, and `pnpm install` exits non-zero while any are pending.
+# These packages need their postinstall to materialise a platform-specific
+# binary, so approve them here.
+allowBuilds:
+  esbuild: true
+  workerd: true
+  sharp: true
+  lightningcss: true
+  '@tailwindcss/oxide': true
+
+# Newly published packages are held back by default; this pin is deliberate.
+minimumReleaseAgeExclude:
+  - '@cloudflare/workers-types@5.20261005.1'

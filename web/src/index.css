@@ -1,0 +1,181 @@
+@import 'tailwindcss';
+
+/* Country-flag glyphs. Windows ships no regional-indicator glyphs, so flag
+   emoji render as bare letters there; this vendored 78 KB subset supplies
+   exactly those codepoints. Local on purpose — no CDN, works offline. */
+@font-face {
+  font-family: 'Twemoji Country Flags';
+  src: url('./assets/TwemojiCountryFlags.woff2') format('woff2');
+  font-display: swap;
+  unicode-range: U+1F1E6-1F1FF;
+}
+
+/* Tailwind v4 CSS-first configuration. The class strategy keeps working with
+   `dark:` utilities because the theme is driven by `.dark` on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Design tokens ─────────────────────────────────────────────────────────
+   Dark is the default; `.dark` re-declares the same names with the dark
+   palette. Both themes share the same hues — deep navy + teal — so a theme
+   switch changes lightness, not identity. */
+:root {
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef3f9;
+  --border: #d7e3ef;
+  --text: #0a1b2b;
+  --muted: #5b7186;
+  --accent: #0074cc;
+  --accent-soft: #d9ecff;
+  --success: #0d9b76;
+  --warn: #b45309;
+  --danger: #d92d4b;
+  --grid: #e3ecf5;
+  --shadow-soft: 0 1px 2px 0 rgb(6 18 36 / 0.05);
+}
+
+.dark {
+  --bg: #05111f;
+  --surface: #08192b;
+  --surface-2: #0d2033;
+  --border: #15395e;
+  --text: #e8f0f8;
+  --muted: #7d93ab;
+  --accent: #0092ff;
+  --accent-soft: #0a2a45;
+  --success: #1cf8ba;
+  --warn: #f5a524;
+  --danger: #f0506e;
+  --grid: #0f2740;
+  --shadow-soft: none;
+}
+
+/* Expose the tokens as Tailwind utilities: bg-surface, text-muted, border-border, … */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --radius-2xl: 1rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100dvh;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 32%, transparent);
+  }
+
+  /* Keyboard users get a visible ring everywhere; mouse users do not. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--muted) 35%, transparent);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--muted) 55%, transparent);
+    background-clip: content-box;
+  }
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+@utility card {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+@utility card-hover {
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+@utility skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-2) 25%,
+    color-mix(in oklab, var(--surface-2) 55%, var(--border)) 37%,
+    var(--surface-2) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

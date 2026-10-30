@@ -1,0 +1,32 @@
+{
+  "name": "vps-dog",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A lightweight server monitoring tool that runs entirely on Cloudflare Workers + D1, in the spirit of Komari and Nezha.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "pnpm --filter @vps-dog/web dev",
+    "dev:worker": "wrangler dev --port 8787",
+    "build": "pnpm --filter @vps-dog/web build && node scripts/ensure-d1.mjs --if-ci --require-assets --migrate",
+    "deploy": "node scripts/ensure-d1.mjs && wrangler d1 migrations apply DB --remote && wrangler deploy",
+    "db:ensure": "node scripts/ensure-d1.mjs",
+    "db:migrate:local": "node scripts/ensure-d1.mjs && wrangler d1 migrations apply DB --local",
+    "db:migrate:remote": "node scripts/ensure-d1.mjs && wrangler d1 migrations apply DB --remote",
+    "typecheck": "pnpm --filter @vps-dog/worker typecheck && pnpm --filter @vps-dog/web typecheck",
+    "test": "pnpm --filter @vps-dog/worker test"
+  },
+  "cloudflare": {
+    "bindings": {
+      "ADMIN_PASSWORD": {
+        "description": "Password for the initial `admin` account. Used only while the `users` table is empty — change it after your first login. If you leave this blank the bootstrap password is `admin`."
+      }
+    }
+  },
+  "devDependencies": {
+    "wrangler": "^4.147.0"
+  },
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

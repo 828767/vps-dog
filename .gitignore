@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+build/
+*.tsbuildinfo
+worker/.wrangler/
+.wrangler/
+
+# go
+agent/dist/
+agent/vps-dog
+agent/vps-dog.exe
+
+# env / secrets
+.dev.vars
+.env
+.env.*
+!.env.example
+
+# editors / os
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# test coverage
+coverage/
+
+# local tooling state
+.workbuddy/
+.workbuddy-ai/
+.debug/

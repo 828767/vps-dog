@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="VPS-DOG — lightweight server monitoring on Cloudflare Workers." />
+    <title>VPS-DOG</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233b82f6'/%3E%3Cpath d='M9 12h14M9 17h9M9 22h11' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <!-- Paint the correct background before any CSS/JS runs: no flash of the wrong theme. -->
+    <style>
+      html {
+        background: #f6f8fa;
+      }
+      html.dark {
+        background: #0b0f14;
+      }
+    </style>
+    <script>
+      (function () {
+        try {
+          var el = document.documentElement;
+          var mode = localStorage.getItem('vpsdog.theme') || 'auto';
+          var dark =
+            mode === 'dark' ||
+            (mode !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) el.classList.add('dark');
+          el.style.colorScheme = dark ? 'dark' : 'light';
+
+          var lang = localStorage.getItem('vpsdog.lang');
+          if (lang !== 'zh-CN' && lang !== 'en') {
+            var nav = (navigator.language || 'en').toLowerCase();
+            lang = nav.indexOf('zh') === 0 ? 'zh-CN' : 'en';
+          }
+          el.setAttribute('lang', lang);
+        } catch (e) {
+          /* private mode / storage disabled — defaults are fine */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
